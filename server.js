@@ -21,7 +21,7 @@ app.use(logger);
 app.use(corsMiddleware);
 //app.use(cors());
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'https://task-front-delta.vercel.app',
+    origin: process.env.CORS_ORIGIN,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     maxAge: 86400
