@@ -3,6 +3,7 @@ const usuarioModel = require('../models/usuario.model')
 
 const authController = {
     login(req, res) {
+
         const { email,senha } = req.body;
     
         if (!email || !senha)
@@ -13,8 +14,6 @@ const authController = {
             return res.status(401).json({ erro: 'Credenciais inválidas' });
 
         if (usuario.senha !== senha){
-            console.log(usuario.senha);
-            console.log(senha);
         return res.status(401).json({ erro: 'Credenciais inválidas' });
         }
         
