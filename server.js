@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+// const pool = require('./Task-back/src/database/db')
 const autenticar = require('./Task-back/src/middlewares/autenticar')
 const express = require('express');
 const tarefasRoutes = require('./Task-back/src/routes/tarefas.routes');
@@ -14,6 +15,11 @@ const logger = require('./Task-back/src/middlewares/logger')
 
 const app = express();
 const PORTA = process.env.PORTA || 3000;
+
+// pool.query('SELECT NOW()', (err,res) => {
+//     if (err) console.error('Erro ao conectar:', err.message);
+//     else console.log ('Banco conectado:', res.rows[0].now)
+// })
 
 app.use(express.json());
 app.use(validarContentType);

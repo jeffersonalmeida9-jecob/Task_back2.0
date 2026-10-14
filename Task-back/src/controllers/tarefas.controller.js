@@ -7,15 +7,15 @@ const tarefasController = {
 //  1 — Listar todas
 //----------------------------------------------------------------------------------------------------------------------------
 
-    listar(req, res) {
+    listar: async (req, res) => {
         const {coluna} = req.query;
         const usuarioId = req.usuario.id;
 
         const resultado = coluna
-            ? tarefasModel.listarPorColuna(coluna)
-            : tarefasModel.listar();
+            ? await tarefasModel.listarPorColuna(coluna)
+            : await tarefasModel.listar();
         const resultadoFiltrado = usuarioId
-            ? resultado.filter(t => t.usuarioId === parseInt(usuarioId))
+            ? resultado.filter(t => t.usuario_id === parseInt(usuarioId))
             : resultado
         res.json(resultadoFiltrado);
     },
@@ -24,9 +24,9 @@ const tarefasController = {
 //  2 — Buscar tarefa por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
-    buscarPorId(req, res) {
+    async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
-        const tarefa = tarefasModel.buscar(id)
+        const tarefa = await tarefasModel.buscar(id)
         if (!tarefa) return res.status(404).json({ erro: 'Tarefa não encontrada'});
         res.json(tarefa)
     },
@@ -35,8 +35,8 @@ const tarefasController = {
 //  3 — Criar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-    criar(req, res) {
-        const { texto, prioridade, coluna, projetoId} = req.body;
+    async criar(req, res) {
+        const { texto, prioridade, coluna, usuario_id, projeto_id, ordem} = req.body;
         const usuarioId = req.usuario.id;
 
         //if (!projetoId) return res.status (400).json({erro: 'Projeto obrigatório'})
@@ -50,47 +50,49 @@ const tarefasController = {
             texto,
             prioridade,
             coluna,
-            usuarioId
+            usuario_id,
+            projeto_id,
+            ordem
         });
-        res.status(201).json(novaTarefa);
+        res.status(201).json(await tarefasModel.adicionar(req.body));
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
 //  5 — Atualizar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-    atualizar(req, res) {
+    async atualizar(req, res) {
         const id = Number(req.params.id);
-        const { texto, prioridade, coluna, cidade } = req.body;
+        const { texto, prioridade_id, coluna, cidade } = req.body;
         const usuarioId = req.usuario.id;
 
-        if (coluna === "andamento") {
-        const tarefasAndamento = tarefasModel
-            .listar()
-            .filter(t => t.coluna === "andamento" 
-                && t.usuarioId === usuarioId
-                && t.id !== id
-            );
+        // if (coluna === "andamento") {
+        // const tarefasAndamento = tarefasModel
+        //     .listar()
+        //     .filter(t => t.coluna === "andamento" 
+        //         && t.usuarioId === usuarioId
+        //         && t.id !== id
+        //     );
 
-            if (tarefasAndamento.length >= 2) {
-                window.alert('Limite de 2 tarefas em andamento por usuário atingido');
-                return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
-            }
-        }
+        //     if (tarefasAndamento.length >= 2) {
+        //         //window.alert('Limite de 2 tarefas em andamento por usuário atingido');
+        //         return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
+        //     }
+        // }
 
         let tarefaAtualizada
         if (coluna === "concluida") {
-            tarefaAtualizada = tarefasModel.atualizar(id, {
+            tarefaAtualizada = await tarefasModel.atualizar(id, {
                 texto,
-                prioridade,
+                prioridade_id,
                 coluna,
                 usuarioId,
                 concluidaEm: new Date().toISOString()
             });
         }    else {
-            tarefaAtualizada = tarefasModel.atualizar(id, {
+            tarefaAtualizada = await tarefasModel.atualizar(id, {
                 texto,
-                prioridade,
+                prioridade_id,
                 coluna,
                 usuarioId,
             });
@@ -105,9 +107,9 @@ const tarefasController = {
 //  6 — Deletar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-    remover(req, res) {
+    async remover(req, res) {
         const id = parseInt(req.params.id);
-        const removida = tarefasModel.remover(id);
+        const removida = await tarefasModel.remover(id);
         if (!removida) {
             return res.status(404).json({ erro: 'Tarefa não encontrada' });
         }

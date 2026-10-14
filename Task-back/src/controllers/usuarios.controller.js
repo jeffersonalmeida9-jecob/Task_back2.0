@@ -7,8 +7,8 @@ const usuariosControler = {
 // ROTA 1 - Listar todos os usuários
 //----------------------------------------------------------------------------------------------------------------------------
 
-    listar(req, res) {
-        const resultado = usuarioModel.listar ()
+    async listar(req, res) {
+        const resultado = await usuarioModel.listar ()
         res.json(resultado)
     },
 
@@ -16,9 +16,9 @@ const usuariosControler = {
 // ROTA 2 — Buscar usuário por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
-    buscarPorId(req, res) {
+    async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
-        const usuario = usuarioModel.buscar(id);
+        const usuario = await usuarioModel.buscar(id);
         if (!usuario) return res.status(404).json({ erro: 'usuario não encontrado'});
         res.json(usuario)
     },
@@ -27,9 +27,9 @@ const usuariosControler = {
 //  ROTA 3 — Adicionar usuário 
 //----------------------------------------------------------------------------------------------------------------------------
 
-    criar(req, res) {
+    async criar(req, res) {
         const { nome, email,} = req.body;
-        const novoUsuario = usuarioModel.adicionar ({
+        const novoUsuario = await usuarioModel.adicionar ({
             nome,
             email
         });
@@ -40,10 +40,10 @@ const usuariosControler = {
 // ROTA 4 — Atualizar usuário
 //----------------------------------------------------------------------------------------------------------------------------
 
-    atualizar(req, res) {
+    async atualizar(req, res) {
         const id = Number(req.params.id);
         const { nome, email } = req.body;
-        const usuarioAtualizado = usuarioModel.atualizar(id, {
+        const usuarioAtualizado =  await usuarioModel.atualizar(id, {
             nome,
             email
         });
@@ -57,15 +57,15 @@ const usuariosControler = {
 // ROTA 5 — Deletar usuarios
 //----------------------------------------------------------------------------------------------------------------------------
 
-    remover(req, res) {
+    async remover(req, res) {
         const id = parseInt(req.params.id);
-        const usuario = usuarioModel.remover(id);
-        const usuario_t = tarefaModel.listar().filter(t => t.usuarioId === id)
-        if (usuario_t) {
-            return res.status(400).json({erro: 'Usuário possui tarefas. Remova as tarefas antes.'})
-        }
+        const usuario = await usuarioModel.remover(id);
+//        const usuario_t = tarefaModel.listar().filter(t => t.usuarioId === id)
+//        if (usuario_t) {
+//            return res.status(400).json({erro: 'Usuário possui tarefas. Remova as tarefas antes.'})
+//        
         if (!usuario) {
-            return res.status(404).json({ erro: 'Usuário não encontrado', usuario_t });
+            return res.status(404).json({ erro: 'Usuário não encontrado', /*usuario_t*/ });
         }
         res.json({ mensagem: 'Usuario removido com sucesso', id });
     },

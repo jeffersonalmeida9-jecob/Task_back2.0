@@ -2,9 +2,7 @@ function validar(schema) {
     return function(req, res, next) {
         
         const erros = [];
-
-//        
-
+        
         for (const campo in schema) {
             const regras = schema[campo];
             const valor = req.body[campo];
