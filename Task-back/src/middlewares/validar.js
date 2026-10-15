@@ -6,6 +6,7 @@ function validar(schema) {
         for (const campo in schema) {
             const regras = schema[campo];
             const valor = req.body[campo];
+            //const valor = req[origem || 'body'] || {};
             const ausente = valor === undefined || valor === null || valor === '';
 
             // 1 — Campo obrigatório ausente

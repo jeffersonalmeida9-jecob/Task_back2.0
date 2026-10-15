@@ -2,13 +2,13 @@
 // Usuários
 //----------------------------------------------------------------------------------------------------------------------------
 
-// let usuarios = [
-//     { id: 6, nome: 'Admin', email: 'adimin@gmail.com', senha: "15483"},
-//     { id: 2, nome: 'Jeff', email: 'jeff@gmail.com', senha: "15487"},
-//     { id: 3, nome: 'Jecob',email: 'jecob@gmail.com', senha: "15489"},
-//     { id: 6, nome: 'admin',email: 'admin@email.com', senha: "1234"},
-// ];
-// let proximoId = 4
+let usuarios = [
+    { id: 6, nome: 'Admin', email: 'adimin@gmail.com', senha: "15483"},
+    { id: 2, nome: 'Jeff', email: 'jeff@gmail.com', senha: "15487"},
+    { id: 3, nome: 'Jecob',email: 'jecob@gmail.com', senha: "15489"},
+    { id: 6, nome: 'admin',email: 'admin@email.com', senha: "1234"},
+];
+let proximoId = 4
 const pool = require('../database/db');
 
 

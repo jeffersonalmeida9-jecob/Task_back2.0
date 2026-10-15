@@ -20,12 +20,11 @@ module.exports = {
         return result.rows[0] || null
     },
 
-    adicionar: async ({ texto, prioridade, coluna, usuario_id, projeto_id, ordem }) => {
-
-        console.log('adicionar:', { texto, prioridade, coluna, usuario_id, projeto_id, ordem })
+    adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, }) => {
+        console.log('adicionar:', { texto, coluna, ordem, usuario_id, projeto_id })
         const result = await pool.query(
-            'INSERT INTO tarefas (texto,prioridade,coluna,usuario_id,projeto_id) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
-            [texto, prioridade|| 2, coluna||'afazer', usuario_id, projeto_id, ordem || 0]
+            'INSERT INTO tarefas (texto,coluna,ordem,usuario_id,projeto_id) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+            [texto, coluna||'afazer', ordem || 0, usuario_id, projeto_id]
         );
         return result.rows[0] || null
     },

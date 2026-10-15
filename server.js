@@ -8,7 +8,7 @@ const usuariosRoutes = require('./Task-back/src/routes/usuarios.routes');
 const projetosRoutes = require('./Task-back/src/routes/projetos.routes');
 const cors = require('cors');
 const authRoutes = require('./Task-back/src/routes/auth.routes');
-
+const tratarErros = require ('./Task-back/src/middlewares/erro.middleware')
 const validarContentType = require('./Task-back/src/middlewares/validarContentType');
 const logger = require('./Task-back/src/middlewares/logger')
 //const corsMiddleware = require('./Task-back/src/middlewares/cors')
@@ -39,4 +39,5 @@ app.use('/usuarios', autenticar, usuariosRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
 app.use((req, res) => {res.status(404).json({ erro: 'Rota não encontrada' });});
 
+app.use(tratarErros);
 app.listen(PORTA, () => console.log(`Servidor rodando em  http://localhost:${PORTA}`));

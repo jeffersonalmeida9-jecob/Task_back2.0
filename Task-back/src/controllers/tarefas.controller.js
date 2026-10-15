@@ -1,5 +1,6 @@
 const tarefasModel = require('../models/tarefas.model');
 const usuariosModel = require('../models/usuario.model')
+const criarErro = require('../utils/criarErros')
 
 const tarefasController = {
 
@@ -17,7 +18,6 @@ const tarefasController = {
         const resultadoFiltrado = usuarioId
             ? resultado.filter(t => t.usuario_id === parseInt(usuarioId))
             : resultado
-        res.json(resultadoFiltrado);
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,9 @@ const tarefasController = {
     async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
         const tarefa = await tarefasModel.buscar(id)
-        if (!tarefa) return res.status(404).json({ erro: 'Tarefa não encontrada'});
+         if (!tarefa) {
+            throw criarErro(404,'Tarefa não encontrada');
+        }
         res.json(tarefa)
     },
 
@@ -36,24 +38,17 @@ const tarefasController = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async criar(req, res) {
-        const { texto, prioridade, coluna, usuario_id, projeto_id, ordem} = req.body;
+        const { texto, prioridade, coluna, ordem, usuario_id, projeto_id } = req.body;
         const usuarioId = req.usuario.id;
 
         //if (!projetoId) return res.status (400).json({erro: 'Projeto obrigatório'})
 
-        const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
-        if (tarefas_andameto.length >= 2) return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
+        //const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
+        //if (tarefas_andameto.length >= 2) return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
 
         const id_u = usuariosModel.buscar(usuarioId)
         if (!id_u) return res.status (400).json({erro: 'Usuário não encontrado'})
-        const novaTarefa = tarefasModel.adicionar ({
-            texto,
-            prioridade,
-            coluna,
-            usuario_id,
-            projeto_id,
-            ordem
-        });
+            
         res.status(201).json(await tarefasModel.adicionar(req.body));
     },
 
