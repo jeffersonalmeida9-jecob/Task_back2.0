@@ -93,7 +93,7 @@ const tarefasController = {
             });
         }
             if (!tarefaAtualizada) {
-                return res.status(404).json({ erro: 'Tarefa não encontrada' });
+            throw criarErro(404,'Tarefa não encontrada');
             }
             res.json(tarefaAtualizada);  
     },
@@ -106,7 +106,7 @@ const tarefasController = {
         const id = parseInt(req.params.id);
         const removida = await tarefasModel.remover(id);
         if (!removida) {
-            return res.status(404).json({ erro: 'Tarefa não encontrada' });
+            throw criarErro(404, 'Tarefa não encontrada')
         }
         //const {projetoId} = req.body;
         //if (projetoId !== null) {
