@@ -1,28 +1,32 @@
+const criarErro = require("../utils/criarErros")
+
 function validar(schema, origem) {
     return function(req, res, next) {
         
+        const dados = req[origem || "body"] || {}
         const erros = [];
         
         for (const campo in schema) {
             const regras = schema[campo];
             //const valor = req.body[campo];
-            const valor = req[origem || 'body'] || {};
+            const valor = dados[campo]
             const ausente = valor === undefined || valor === null || valor === '';
-
-            if (regras.tipo === 'inteiro') {
-                const numero = typeof valor === 'string' ? Number(valor) : valor;
-
-                if(!Number.isInteger(numero) || numero <= 0) {
-                    erros.push(`Os campos ${campo} deve ser inteiro positivo`);
-                }
-            } else if (regras.tipo && typeof valor !== regras.tipo) {
-                erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`)};
 
             // 1 — Campo obrigatório ausente
             if (regras.obrigatorio && ausente) {
                 erros.push(`O campo '${campo}' é obrigatório`);
-                continue; // não testar as demais regras
+                continue; // não testar as demais regras 
             };
+
+            if (ausente) continue;
+
+            if (regras.tipo === 'inteiro') {
+                const numero = typeof valor === 'string' ? Number(valor) : valor;
+                 if(!Number.isInteger(numero) || numero <= 0) {
+                    erros.push(`Os campos ${campo} deve ser inteiro positivo`);
+                }
+            } else if (regras.tipo && typeof valor !== regras.tipo) {
+                erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`)};
             
             // 2 — Tipo incorreto (só se o valor foi enviado)
             if (!ausente && regras.tipo && typeof valor !== regras.tipo) {

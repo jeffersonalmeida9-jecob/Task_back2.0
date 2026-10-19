@@ -1,9 +1,10 @@
 const express = require('express');
-const router = express.Router ();
 const usuariosControler = require('../controllers/usuarios.controller');
 const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
 
+const router = express.Router ();
+const idValido = validar(schemas.id, "params")
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 1 - Listar todos os usuários
@@ -15,28 +16,24 @@ router.get('/', usuariosControler.listar)
 // ROTA 2 — Buscar usuário por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.get('/:id', usuariosControler.buscarPorId)
+router.get('/:id', idValido, usuariosControler.buscarPorId)
 
 //----------------------------------------------------------------------------------------------------------------------------
 //ROTA 3 — Adicionar usuário 
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.post('/',
-    validar(schemas.usuario),
-    usuariosControler.criar)
+router.post('/', validar(schemas.usuario), usuariosControler.criar)
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 4 — Atualizar usuário
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.put('/:id',
-    validar(schemas.usuario),
-    usuariosControler.atualizar)
+router.put('/:id', idValido, validar(schemas.usuario), usuariosControler.atualizar)
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 5 — Deletar usuarios
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.delete('/:id', usuariosControler.remover)
+router.delete('/:id', idValido, usuariosControler.remover)
 
 module.exports = router;

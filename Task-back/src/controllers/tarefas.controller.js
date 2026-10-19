@@ -2,7 +2,7 @@ const tarefasModel = require('../models/tarefas.model');
 const usuariosModel = require('../models/usuario.model')
 const criarErro = require('../utils/criarErros')
 
-const tarefasController = {
+const tarefasControler = {
 
 //----------------------------------------------------------------------------------------------------------------------------
 //  1 — Listar todas
@@ -125,4 +125,4 @@ const tarefasController = {
     },
 };
 
-module.exports = tarefasController
+module.exports = tarefasControler

@@ -28,14 +28,30 @@ module.exports = {
         );
         return result.rows[0] || null
     },
-    
-    atualizar: async (id, dados) => {
-        const { texto, prioridade_id, coluna, usuarioId } = dados;
-        const result = await pool.query(
-            'UPDATE tarefas SET texto=$1,prioridade_id=$2,coluna=$3,usuario_id=$4 WHERE id=$5 RETURNING *',
-            [texto, prioridade_id, coluna, usuarioId, id]
-        );
-        return result.rows[0] || null;
+
+     async atualizar(id, dados) {
+        const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+        const concluidaEm = dados.coluna === 'concluida' ? new Date() : null;
+
+        const iniciadoEm = tarefaAtual.rows[0].iniciada_em
+
+        if(tarefaAtual.rows[0].coluna === 'andamento' && dados.coluna === 'afazer') {}
+        else if (tarefaAtual.rows[0].coluna === 'afazer' && dados.coluna === 'andamento') {};
+        
+        const resultado = await pool.query(
+            `UPDATE tarefas SET
+            texto = $1,
+            coluna = $2,
+            usuario_id= $3,
+            projeto_id = $4,
+            prioridade_id = $5,
+            concluido_em = $6,
+            iniciada_em = $7
+            WHERE id = $8
+            RETURNING *`,
+            [dados.texto, dados.coluna, dados.usuario_id, dados.projeto_id, dados.prioridade_id, concluidaEm, iniciadoEm, id]
+        )
+            return resultado.rows[0] || null
     },
 
     remover: async (id) => {

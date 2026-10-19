@@ -4,6 +4,8 @@ const tarefasController = require('../controllers/tarefas.controller')
 const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
 
+const idValido = validar(schemas.id, "params")
+
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 1 — Listar todas
 //----------------------------------------------------------------------------------------------------------------------------
@@ -20,7 +22,7 @@ router.get('/estatisticas', tarefasController.estatisticas);
 // ROTA 3 — Buscar tarefa por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.get('/:id', tarefasController.buscarPorId);
+router.get('/:id', idValido, tarefasController.buscarPorId);
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 4 — Filtrar por coluna
@@ -50,14 +52,12 @@ router.post('/',
 // ROTA 6 — Atualizar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.put('/:id',
-   // validar(schemas.tarefa),
-    tarefasController.atualizar);
+router.put('/:id',  idValido, validar(schemas.tarefa), tarefasController.atualizar);
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 7 — Deletar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.delete('/:id', tarefasController.remover);
+router.delete('/:id', idValido, tarefasController.remover);
 
 module.exports = router;
