@@ -1,5 +1,5 @@
 const express = require('express');
-const prioridadeControler = require('../controllers/projetos.controller');
+const prioridadeControler = require('../controllers/prioridade.controller');
 const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
 

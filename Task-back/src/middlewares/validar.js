@@ -14,29 +14,29 @@ function validar(schema, origem) {
 
             // 1 — Campo obrigatório ausente
             if (regras.obrigatorio && ausente) {
+                console.log("ok 1")
                 erros.push(`O campo '${campo}' é obrigatório`);
                 continue; // não testar as demais regras 
             };
 
             if (ausente) continue;
 
-            if (regras.tipo === 'inteiro') {
+            
+            // 2 — Tipo incorreto (só se o valor foi enviado)
+           if (regras.tipo === 'inteiro') {
                 const numero = typeof valor === 'string' ? Number(valor) : valor;
                  if(!Number.isInteger(numero) || numero <= 0) {
+                    console.log("ok 2")
                     erros.push(`Os campos ${campo} deve ser inteiro positivo`);
                 }
             } else if (regras.tipo && typeof valor !== regras.tipo) {
+                console.log("ok 3")
                 erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`)};
             
-            // 2 — Tipo incorreto (só se o valor foi enviado)
-            if (!ausente && regras.tipo && typeof valor !== regras.tipo) {
-                erros.push(
-                `O campo '${campo}' deve ser do tipo ${regras.tipo}`
-                );
-            }
 
             // 3 — Valor fora dos permitidos (enum)
             if (regras.enum && !regras.enum.includes(valor)) {
+                console.log("ok 5")
                 erros.push(
                     `O campo '${campo}' deve ser um de: ${regras.enum.join(', ')}`
                 );
@@ -45,23 +45,28 @@ function validar(schema, origem) {
             // 4 — Formato de email
             if (regras.formato === 'email') {
                 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!re.test(valor))
+                if (!re.test(valor)){
+                    console.log("ok 6")
                     erros.push(`O campo '${campo}' deve ser um email válido`);
+                }
             }
 
             // 5 — Tamanho mínimo de texto
-            if (regras.minLength && valor.length < regras.minLength)
+            if (regras.minLength && valor.length < regras.minLength) {
+                console.log("ok 7")
                 erros.push(
                     `O campo '${campo}' deve ter ao menos ${regras.minLength} caracteres`
                 );
-
+            }
             // 6 — Tamanho máximo de texto
-            if (regras.maxLength && valor.length > regras.maxLength)
+            if (regras.maxLength && valor.length > regras.maxLength) {
+                console.log("ok 8")
                 erros.push(
                     `O campo '${campo}' deve ter no máximo ${regras.maxLength} caracteres`
                 );
-
+            }
             if (regras.obrigatorio && ausente) {
+                console.log("ok 9")
                 erros.push (`O campo ${campo} é obrigatório`);
                 continue
             }

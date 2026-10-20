@@ -18,6 +18,7 @@ const tarefasControler = {
         const resultadoFiltrado = usuarioId
             ? resultado.filter(t => t.usuario_id === parseInt(usuarioId))
             : resultado
+        res.json(resultadoFiltrado)
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +39,6 @@ const tarefasControler = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async criar(req, res) {
-        const { texto, prioridade, coluna, ordem, usuario_id, projeto_id } = req.body;
         const usuarioId = req.usuario.id;
 
         //if (!projetoId) return res.status (400).json({erro: 'Projeto obrigatório'})
@@ -46,8 +46,6 @@ const tarefasControler = {
         //const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
         //if (tarefas_andameto.length >= 2) return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
 
-        const id_u = usuariosModel.buscar(usuarioId)
-        if (!id_u) return res.status (400).json({erro: 'Usuário não encontrado'})
             
         res.status(201).json(await tarefasModel.adicionar(req.body));
     },

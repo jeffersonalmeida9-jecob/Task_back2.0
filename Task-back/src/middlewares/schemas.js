@@ -6,7 +6,6 @@ const schemas = {
 
     tarefa: {
         texto:      {obrigatorio: true, tipo: 'string'},
-        // prioridade: {tipo: 'string', enum: ["alta", "media", "baixa"]},
         coluna:     {obrigatorio: true, tipo: 'string', enum: ["afazer", "andamento", "concluido"]},
         usuario_id:  {obrigatorio: true, tipo: 'inteiro'},
         projeto_id:  {obrigatorio: true, tipo: 'inteiro'},

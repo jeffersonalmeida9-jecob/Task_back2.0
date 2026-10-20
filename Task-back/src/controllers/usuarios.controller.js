@@ -19,7 +19,9 @@ const usuariosControler = {
     async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
         const usuario = await usuarioModel.buscar(id);
-        if (!usuario) return res.status(404).json({ erro: 'usuario não encontrado'});
+        if (!usuario) {
+            throw criarErro(404,'Usuário não encontrado');
+        }
         res.json(usuario)
     },
 

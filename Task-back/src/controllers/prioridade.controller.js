@@ -1,5 +1,4 @@
 const prioridadeModel = require("../models/prioridade.model");
-//const tarefaModel = require("../models/tarefas.model")
 
 const prioridadeController = {
 

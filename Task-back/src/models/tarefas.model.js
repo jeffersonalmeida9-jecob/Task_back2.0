@@ -24,7 +24,7 @@ module.exports = {
         console.log('adicionar:', { texto, coluna, ordem, usuario_id, projeto_id })
         const result = await pool.query(
             'INSERT INTO tarefas (texto,coluna,ordem,usuario_id,projeto_id) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-            [texto, coluna||'afazer', ordem || 0, usuario_id, projeto_id]
+            [texto, coluna || 'afazer', ordem || 0, usuario_id, projeto_id]
         );
         return result.rows[0] || null
     },
