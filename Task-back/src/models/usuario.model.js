@@ -1,14 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------------
 // Usuários
 //----------------------------------------------------------------------------------------------------------------------------
-
-let usuarios = [
-    { id: 6, nome: 'Admin', email: 'adimin@gmail.com', senha: "15483"},
-    { id: 2, nome: 'Jeff', email: 'jeff@gmail.com', senha: "15487"},
-    { id: 3, nome: 'Jecob',email: 'jecob@gmail.com', senha: "15489"},
-    { id: 6, nome: 'admin',email: 'admin@email.com', senha: "1234"},
-];
-let proximoId = 4
 const pool = require('../database/db');
 
 
@@ -27,22 +19,14 @@ module.exports = {
         return result.rows[0] || null
     },
 
-    adicionar: async ({ nome, email }) => {
+    adicionar: async ({ nome, email, senha }) => {
         const result = await pool.query(
-            'INSERT INTO tarefas (nome,email,) VALUES ($1,$2) RETURNING *',
-            [nome, email]
+            'INSERT INTO tarefas (nome,email,senha_hash) VALUES ($1,$2,$3) RETURNING *',
+            [nome, email, senha]
         );
         return result.rows[0] || null
     },
-    //            const novousuario = { 
-    //         id: proximoId++, 
-    //         nome: nome,
-    //         email: email    
-    //     }
-    //     usuarios.push(novousuario);
-    //     return novousuario
-    // },
-
+ 
     atualizar: (id, dados) => {
         const indice = usuarios.findIndex(t => t.id === id);
         if (indice === -1) {

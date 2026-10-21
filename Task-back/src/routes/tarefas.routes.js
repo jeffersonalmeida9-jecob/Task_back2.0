@@ -44,8 +44,8 @@ router.get('/', (req, res) => {
 // ROTA 5 — Criar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.post('/',
-    validar(schemas.tarefa),
+router.post('/', 
+    validar(schemas.tarefa), 
     tarefasController.criar);
 
 

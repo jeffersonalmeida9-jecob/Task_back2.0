@@ -8,6 +8,7 @@ const usuariosControler = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async listar(req, res) {
+        console.log("asldkfffffffffffffffffffffffffffffffffffffffj")
         const resultado = await usuarioModel.listar ()
         res.json(resultado)
     },

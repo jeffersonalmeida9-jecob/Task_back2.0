@@ -65,18 +65,9 @@ function validar(schema, origem) {
                     `O campo '${campo}' deve ter no máximo ${regras.maxLength} caracteres`
                 );
             }
-            if (regras.obrigatorio && ausente) {
-                console.log("ok 9")
-                erros.push (`O campo ${campo} é obrigatório`);
-                continue
-            }
-            if (ausente) continue;
-
-            if (erros.length > 0) {
-                throw criarErro(400, 'Dados inválidos', erros);
-            }
+        }  
+            if (erros.length > 0) throw criarErro(400, erros.join(";"));
             next();
-        };
     }   
 }
 

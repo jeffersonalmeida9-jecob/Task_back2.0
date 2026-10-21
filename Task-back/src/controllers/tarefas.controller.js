@@ -38,17 +38,21 @@ const tarefasControler = {
 //  3 — Criar tarefa
 //----------------------------------------------------------------------------------------------------------------------------
 
-    async criar(req, res) {
-        const usuarioId = req.usuario.id;
-
-        //if (!projetoId) return res.status (400).json({erro: 'Projeto obrigatório'})
-
+   async criar(req, res) {
+    try {
         //const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
         //if (tarefas_andameto.length >= 2) return res.status(400).json({erro: 'Limite de 2 tarefas em andamento por usuário atingido'})
-
-            
-        res.status(201).json(await tarefasModel.adicionar(req.body));
-    },
+        
+        const novaTarefa = await tarefasModel.adicionar(req.body);
+        return res.status(201).json(novaTarefa);
+    } catch (error) {
+        // O console.log vai te mostrar no terminal o REAL motivo de ter falhado
+        console.error("Erro ao criar tarefa:", error); 
+        
+        // Retorna o erro amigável para o cliente sem quebrar o servidor
+        return res.status(500).json({ erro: 'Não foi possível adicionar a tarefa', detalhes: error.message });
+    }
+},
 
 //----------------------------------------------------------------------------------------------------------------------------
 //  5 — Atualizar tarefa
