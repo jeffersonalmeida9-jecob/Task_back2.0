@@ -27,16 +27,12 @@ module.exports = {
         return result.rows[0] || null
     },
  
-    atualizar: (id, dados) => {
-        const indice = usuarios.findIndex(t => t.id === id);
-        if (indice === -1) {
-            return null;
-        }
-        usuarios[indice] = {
-            id,
-            ...dados
-        };
-        return usuarios[indice];
+    atualizar: async (id, { nome, email, senha_hash }) => {
+        const result = await pool.query(
+            'UPDATE usuarios SET nome = $1, email = $2, senha_hash = $3 WHERE id = $4 RETURNING *',
+            [nome, email, senha_hash, id]
+        );
+        return result.rows[0] || null;
     },
 
     remover: async (id) => {
@@ -44,5 +40,11 @@ module.exports = {
         return result.rows[0] || null;
     },
 
-    buscarPorEmail: (email) => usuarios.find(t => t.email === email),
+    buscarPorEmail: async (email) => {
+        const result = await pool.query(
+            'SELECT * FROM usuarios WHERE email = $1',
+            [email]
+        );
+        return result.rows[0] || null;
+    },
 };
