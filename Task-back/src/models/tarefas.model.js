@@ -2,22 +2,67 @@
 // Tarefas
 //----------------------------------------------------------------------------------------------------------------------------
 const pool = require('../database/db');
+const prisma = require('../database/prisma')
+const incluirNomes = {
+    projetos: { select: { nome: true}},
+    usuarios: { select: { nome: true}}
+}
+
+function formatarTarefas(tarefa) {
+    const { projetos, usuarios, prioridades, ...resto} = tarefa
+    return {
+        ...resto,
+        projeto: projetos?.nome,
+        usuario: usuarios?.nome,
+        prioridade: prioridades?.descricao,
+        prioridade_cor: prioridades?.cor,
+    }
+}
 
 module.exports = {
-    listar: async () => {const result = await pool.query (
-            'SELECT * FROM tarefas ORDER BY id'
-        );
-        return result.rows; 
+    listar: async () => {
+      const result = await prisma.tarefas.findMany({
+        select: {
+          id: true,
+          texto: true,
+          coluna: true,
+          usuario_id: true,
+          projeto_id: true,
+          prioridade_id: true,
+          concluida_em: true,
+          iniciada_em: true,
+          ordem: true,
+          prioridade: {
+            select: {
+              descricao: true,
+              // cor: true 
+            }
+          },
+          projetos: {
+            select: {
+              nome: true
+            }
+          },
+          usuarios: {
+            select: {
+              nome: true
+            }
+          }
+        }
+        });
+    
+      return result;
     },
+
 
     listarPorColuna: (coluna) => tarefas.filter (t => t.coluna === coluna),
 
     buscar: async (id) => {
-        const result = await pool.query(
-            'SELECT * FROM tarefas WHERE id = $1',
-            [id]
-        );
-        return result.rows[0] || null
+        const tarefa = await prisma.tarefas.findUnique({
+            where: {id},
+            include: incluirNomes,
+        });
+        return tarefa ? formatarTarefas(tarefa) : null;
     },
 
     adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, }) => {

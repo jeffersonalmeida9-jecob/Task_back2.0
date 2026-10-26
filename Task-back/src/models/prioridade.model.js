@@ -1,23 +1,29 @@
 //----------------------------------------------------------------------------------------------------------------------------
 // Tarefas
 //----------------------------------------------------------------------------------------------------------------------------
-const pool = require('../database/db');
+ const pool = require('../database/db');
+const prisma = require('../database/prisma')
 
 module.exports = {
-    listar: async () => {const result = await pool.query (
-            'SELECT * FROM prioridade ORDER BY id'
-        );
-        return result.rows; 
+
+    listar: async () => {const result = await prisma.prioridade.findMany({
+        select: {
+            id: true, 
+            descricao: true, 
+            ativo: true, 
+            //cor:true
+        },
+        where:{ativo: true},
+        orderBy: {id: 'asc'},
+    }); 
+        return result; 
     },
 
-    listarPorColuna: (coluna) => tarefas.filter (t => t.coluna === coluna),
-
     buscar: async (id) => {
-        const result = await pool.query(
-            'SELECT * FROM prioridade WHERE id = $1',
-            [id]
-        );
-        return result.rows[0] || null
+        const prioridade = await prisma.prioridade.findUnique({
+            where: {id},
+        });
+        return prioridade
     },
 
     adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, }) => {
@@ -42,13 +48,4 @@ module.exports = {
         const result = await pool.query('DELETE FROM tarefas WHERE id=$1 RETURNING *',[id]);
         return result.rows[0] || null;
     },
-
-    estatisticas: () => {
-        const porColuna = {
-            afazer: tarefas.filter(t => t.coluna === 'afazer').length,
-            andamento: tarefas.filter(t => t.coluna === 'andamento').length,
-            concluido: tarefas.filter(t => t.coluna === 'concluido').length,
-        };
-        return {total: tarefas.length, porColuna};
-    }
 };
