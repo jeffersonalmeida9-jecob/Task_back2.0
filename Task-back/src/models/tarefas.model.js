@@ -5,18 +5,19 @@ const pool = require('../database/db');
 const prisma = require('../database/prisma')
 const incluirNomes = {
     projetos: { select: { nome: true}},
-    usuarios: { select: { nome: true}}
+    usuarios: { select: { nome: true}},
+    prioridades: { select: { descricao: true } },
 }
 
 function formatarTarefas(tarefa) {
     const { projetos, usuarios, prioridades, ...resto} = tarefa
     return {
-        ...resto,
-        projeto: projetos?.nome,
-        usuario: usuarios?.nome,
-        prioridade: prioridades?.descricao,
-        prioridade_cor: prioridades?.cor,
-    }
+      ...resto,
+      projeto: projetos?.nome,
+      usuario: usuarios?.nome,
+      prioridade: prioridades?.descricao,
+      prioridade_cor: prioridades?.cor,
+    };
 }
 
 module.exports = {
@@ -65,39 +66,48 @@ module.exports = {
         return tarefa ? formatarTarefas(tarefa) : null;
     },
 
-    adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, }) => {
-        console.log('adicionar:', { texto, coluna, ordem, usuario_id, projeto_id })
-        const result = await pool.query(
-            'INSERT INTO tarefas (texto,coluna,ordem,usuario_id,projeto_id) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-            [texto, coluna || 'afazer', ordem || 0, usuario_id, projeto_id]
-        );
-        return result.rows[0] || null
+    adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, prioridade_id }) => {
+        const result = await prisma.tarefas.create({
+          data: {
+            texto: texto,
+            coluna: coluna || 'afazer',
+            ordem: ordem || 0,
+            usuario_id: usuario_id,
+            projeto_id: projeto_id,
+            prioridade_id: prioridade_id || 2,
+          },
+          include: incluirNomes,
+        });
+        return formatarTarefas(result)
     },
 
-     async atualizar(id, dados) {
-        const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+      atualizar: async (id, dados) => {
+        const tarefaAtual = await prisma.tarefas.findUnique({
+          where: { id } });
+        if (!tarefaAtual) return null;
+
         const concluidaEm = dados.coluna === 'concluida' ? new Date() : null;
 
-        const iniciadoEm = tarefaAtual.rows[0].iniciada_em
+        const iniciadoEm = dados.iniciada_em
 
         if(tarefaAtual.rows[0].coluna === 'andamento' && dados.coluna === 'afazer') {}
         else if (tarefaAtual.rows[0].coluna === 'afazer' && dados.coluna === 'andamento') {};
         
-        const resultado = await pool.query(
-            `UPDATE tarefas SET
-            texto = $1,
-            coluna = $2,
-            usuario_id= $3,
-            projeto_id = $4,
-            prioridade_id = $5,
-            concluido_em = $6,
-            iniciada_em = $7
-            WHERE id = $8
-            RETURNING *`,
-            [dados.texto, dados.coluna, dados.usuario_id, dados.projeto_id, dados.prioridade_id, concluidaEm, iniciadoEm, id]
-        )
-            return resultado.rows[0] || null
-    },
+        const resultado = await prisma.tarefas.update({
+          where: { id },
+          data: {
+            texto: dados.texto,
+            coluna: dados.coluna,
+            usuario_id: Number(dados.usuario_id),
+            projeto_id: Number(dados.projeto_id),
+            prioridade_id: Number(dados.prioridade_id),
+            concluido_em: dados.concluido_em,
+            iniciada_em: dados.iniciada_em
+          },
+          include: incluirNomes
+        });
+        return formatarTarefas(resultado)
+      },
 
     remover: async (id) => {
         const result = await pool.query('DELETE FROM tarefas WHERE id=$1 RETURNING *',[id]);

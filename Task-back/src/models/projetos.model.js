@@ -2,20 +2,32 @@
 // Projetos
 //----------------------------------------------------------------------------------------------------------------------------
 
-let projetos = [
-    { id: 1, descriçao: 'teste', ativo: true,},
-    { id: 2, descriçao: 'task-flow', ativo: true,},
-    { id: 3, descriçao: 'O.D.L', ativo: false,},
-];
-let proximoId = 4
+const prisma = require('../database/prisma')
 
 module.exports = {
-    listar: () => projetos,
+    listar: async () => {
+      const result = await prisma.projetos.findMany({
+            select: {
+              id: true,
+              nome: true,
+              descriçao: true,
+              usuario_id: true,
+              criado_em: true,
+              atualizado_em: true,
+            }
+        })
+        return result
+    },
 
-    buscar: (id) => projetos.find(t => t.id === id),
+    buscar: async (id) => {
+        const result = await prisma.projetos.findUnique({
+            where: {id},
+        });
+        return result
+    },
 
     adicionar: ({ descriçao, ativo }) => {
-                const novoProjeto = { 
+        const novoProjeto = { 
             id: proximoId++, 
             descriçao: descriçao,
             ativo: ativo || true     

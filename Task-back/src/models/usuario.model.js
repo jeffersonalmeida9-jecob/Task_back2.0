@@ -2,21 +2,35 @@
 // Usuários
 //----------------------------------------------------------------------------------------------------------------------------
 const pool = require('../database/db');
+const prisma = require('../database/prisma');
 
 
 module.exports = {
-    listar: async () => {const result = await pool.query (
-            'SELECT * FROM usuarios ORDER BY id'
-        );
-        return result.rows; 
+    listar: async () => {
+        const result = await prisma.usuarios.findMany ({
+            select: {
+                id: true,
+                nome: true,
+                email: true,
+                criado_em: true,
+                atualizado_em: true,
+            }
+        });
+        return result; 
     },
 
     buscar: async (id) => {
-        const result = await pool.query(
-            'SELECT * FROM usuarios WHERE id = $1',
-            [id]
-        );
-        return result.rows[0] || null
+        const result = await prisma.usuarios.findUnique({
+            where: {id},
+            select: {
+                id: true,
+                nome: true,
+                email: true,
+                criado_em: true,
+                atualizado_em: true,
+            }
+        });
+        return result
     },
 
     adicionar: async ({ nome, email, senha }) => {
