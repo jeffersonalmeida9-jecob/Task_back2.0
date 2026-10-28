@@ -6,7 +6,7 @@ const prisma = require('../database/prisma')
 const incluirNomes = {
     projetos: { select: { nome: true}},
     usuarios: { select: { nome: true}},
-    prioridades: { select: { descricao: true } },
+    prioridade: { select: { descricao: true } },
 }
 
 function formatarTarefas(tarefa) {
@@ -56,7 +56,7 @@ module.exports = {
     },
 
 
-    listarPorColuna: (coluna) => tarefas.filter (t => t.coluna === coluna),
+    //listarPorColuna: (coluna) => tarefas.filter (t => t.coluna === coluna),
 
     buscar: async (id) => {
         const tarefa = await prisma.tarefas.findUnique({
@@ -66,15 +66,15 @@ module.exports = {
         return tarefa ? formatarTarefas(tarefa) : null;
     },
 
-    adicionar: async ({ texto, coluna, ordem, usuario_id, projeto_id, prioridade_id }) => {
+    adicionar: async ({ texto, coluna, usuario_id, projeto_id, prioridade_id, ordem }) => {
         const result = await prisma.tarefas.create({
           data: {
             texto: texto,
             coluna: coluna || 'afazer',
-            ordem: ordem || 0,
             usuario_id: usuario_id,
             projeto_id: projeto_id,
             prioridade_id: prioridade_id || 2,
+            ordem: ordem || 0,
           },
           include: incluirNomes,
         });
@@ -90,10 +90,10 @@ module.exports = {
 
         const iniciadoEm = dados.iniciada_em
 
-        if(tarefaAtual.rows[0].coluna === 'andamento' && dados.coluna === 'afazer') {}
-        else if (tarefaAtual.rows[0].coluna === 'afazer' && dados.coluna === 'andamento') {};
+        //if(tarefaAtual.rows[0].coluna === 'andamento' && dados.coluna === 'afazer') {}
+        //else if (tarefaAtual.rows[0].coluna === 'afazer' && dados.coluna === 'andamento') {};
         
-        const resultado = await prisma.tarefas.update({
+        const result = await prisma.tarefas.update({
           where: { id },
           data: {
             texto: dados.texto,
@@ -106,20 +106,17 @@ module.exports = {
           },
           include: incluirNomes
         });
-        return formatarTarefas(resultado)
+        return formatarTarefas(result)
       },
 
-    remover: async (id) => {
-        const result = await pool.query('DELETE FROM tarefas WHERE id=$1 RETURNING *',[id]);
-        return result.rows[0] || null;
-    },
+    
 
-    estatisticas: () => {
-        const porColuna = {
-            afazer: tarefas.filter(t => t.coluna === 'afazer').length,
-            andamento: tarefas.filter(t => t.coluna === 'andamento').length,
-            concluido: tarefas.filter(t => t.coluna === 'concluido').length,
-        };
-        return {total: tarefas.length, porColuna};
-    }
+    //estatisticas: () => {
+    //    const porColuna = {
+    //        afazer: tarefas.filter(t => t.coluna === 'afazer').length,
+    //        andamento: tarefas.filter(t => t.coluna === 'andamento').length,
+    //        concluido: tarefas.filter(t => t.coluna === 'concluido').length,
+    //    };
+    //    return {total: tarefas.length, porColuna};
+    //}
 };

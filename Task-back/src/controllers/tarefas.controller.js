@@ -60,8 +60,8 @@ const tarefasControler = {
 
     async atualizar(req, res) {
         const id = Number(req.params.id);
-        const { texto, prioridade_id, coluna, cidade } = req.body;
-        const usuarioId = req.usuario.id;
+        const dados = req.body;
+        const usuario_Id = req.usuario.id;
 
         // if (coluna === "andamento") {
         // const tarefasAndamento = tarefasModel
@@ -78,21 +78,16 @@ const tarefasControler = {
         // }
 
         let tarefaAtualizada
-        if (coluna === "concluida") {
+        if (dados.coluna === "concluida") {
             tarefaAtualizada = await tarefasModel.atualizar(id, {
-                texto,
-                prioridade_id,
-                coluna,
-                usuarioId,
+                ...dados,
                 concluidaEm: new Date().toISOString()
-            });
-        }    else {
-            tarefaAtualizada = await tarefasModel.atualizar(id, {
-                texto,
-                prioridade_id,
-                coluna,
-                usuarioId,
-            });
+            }, usuario_Id);
+        }   else {
+            tarefaAtualizada = await tarefasModel.atualizar(
+                id, 
+                dados, 
+                usuario_Id);
         }
             if (!tarefaAtualizada) {
             throw criarErro(404,'Tarefa não encontrada');

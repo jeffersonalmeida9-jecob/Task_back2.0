@@ -10,7 +10,7 @@ module.exports = {
             select: {
               id: true,
               nome: true,
-              descriçao: true,
+              descricao: true,
               usuario_id: true,
               criado_em: true,
               atualizado_em: true,
