@@ -26,26 +26,31 @@ module.exports = {
         return result
     },
 
-    adicionar: ({ descriçao, ativo }) => {
-        const novoProjeto = { 
-            id: proximoId++, 
-            descriçao: descriçao,
-            ativo: ativo || true     
-        }
-        tarefas.push(novoProjeto);
-        return novoProjeto
+    adicionar: async ({ nome, descricao, usuario_id, /*ativo*/ }) => {
+        const result = await prisma.projetos.create({
+            data: {
+                nome: nome,
+                descricao: descricao,
+                usuario_id: usuario_id,
+                /*ativo: ativo || true*/  
+            }
+        })
+        return result
     },
 
-    atualizar: (id, dados) => {
-        const indice = projetos.findIndex(t => t.id === id);
-        if (indice === -1) {
-            return null;
-        }
-        projetos[indice] = {
-            id,
-            ...dados
-        };
-        return projetos[indice];
+    atualizar: async (id, dados) => {
+        const ProjetoNow = await prisma.projetos.findUnique ({
+            where: { id } });
+        if (!ProjetoNow) return null 
+            
+        const result = await prisma.projetos.update({
+            data: {
+                nome: dados.nome,
+                descricao: dados.descricao,
+                usuario_id: dados.usuario_id,        
+            }
+           });
+        return result
     },
 
     remover: (id) => {

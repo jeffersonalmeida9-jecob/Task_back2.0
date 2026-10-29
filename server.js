@@ -13,6 +13,8 @@ const tratarErros = require ('./Task-back/src/middlewares/erro.middleware');
 const validarContentType = require('./Task-back/src/middlewares/validarContentType');
 const logger = require('./Task-back/src/middlewares/logger');
 const criarErro = require('./Task-back/src/utils/criarErros');
+const swaggerUi = require('swagger-ui-express');
+const openapi = require('./Task-back/src/docs/openapi');
 //const corsMiddleware = require('./Task-back/src/middlewares/cors')
 
 const app = express();
@@ -40,6 +42,7 @@ app.use('/tarefas', autenticar, tarefasRoutes);
 app.use('/usuarios', autenticar, usuariosRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
 app.use('/prioridade', autenticar, prioridadeRoutes)
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 app.use((req, res) => {
     throw criarErro (404, "Rota não encontrada")

@@ -1,7 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------------
 // Usuários
 //----------------------------------------------------------------------------------------------------------------------------
-const pool = require('../database/db');
 const prisma = require('../database/prisma');
 
 
@@ -38,13 +37,13 @@ module.exports = {
             data: {
                 nome: nome,
                 email: email,
-                senha: senha
+                senha_hash: senha
             }
         });
         return result
     },
  
-    atualizar: async (id, nome, email, senha_hash ) => {
+    atualizar: async (id, {nome, email, senha_hash}      ) => {
         const UsuarioNow = await prisma.usuarios.findUnique({
             where: { id } });
         if (!UsuarioNow) return null;
@@ -72,11 +71,18 @@ module.exports = {
           }
         },
 
-    //buscarPorEmail: async (email) => {
-    //    const result = await pool.query(
-    //        'SELECT * FROM usuarios WHERE email = $1',
-    //        [email]
-    //    );
-    //    return result.rows[0] || null;
-    //},
+        buscarPorEmail: async (email) => {
+            const result = await prisma.usuarios.findUnique({
+                where: {email},
+                select: {
+                    id: true,
+                    nome: true,
+                    email: true,
+                    senha_hash: true,
+                    criado_em: true,
+                    atualizado_em: true,
+                }
+            });
+            return result
+        },
 };

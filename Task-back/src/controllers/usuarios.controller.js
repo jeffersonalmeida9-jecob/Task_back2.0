@@ -8,7 +8,6 @@ const usuariosControler = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async listar(req, res) {
-        console.log("asldkfffffffffffffffffffffffffffffffffffffffj")
         const resultado = await usuarioModel.listar ()
         res.json(resultado)
     },
@@ -31,10 +30,11 @@ const usuariosControler = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async criar(req, res) {
-        const { nome, email,} = req.body;
+        const { nome, email, senha} = req.body;
         const novoUsuario = await usuarioModel.adicionar ({
             nome,
-            email
+            email,
+            senha
         });
         res.status(201).json(novoUsuario);
     },
@@ -45,7 +45,7 @@ const usuariosControler = {
 
     async atualizar(req, res) {
         const id = Number(req.params.id);
-        const { nome, email } = req.body;
+        const { nome, email, } = req.body;
         const usuarioAtualizado =  await usuarioModel.atualizar(id, {
             nome,
             email

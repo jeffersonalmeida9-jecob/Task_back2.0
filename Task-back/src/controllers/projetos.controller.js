@@ -5,8 +5,8 @@ const projetosControler = {
 // ROTA 1 - Listar todos os Projetos
 //----------------------------------------------------------------------------------------------------------------------------
 
-    listar(req, res) {
-        const resultado = projetosModel.listar ()
+    async listar(req, res) {
+        const resultado =  await projetosModel.listar ()
         res.json(resultado)
     },
 
@@ -14,9 +14,9 @@ const projetosControler = {
 // ROTA 2 — Buscar Projeto por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
-    buscarPorId(req, res) {
+    async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
-        const projeto = projetosModel.buscar(id);
+        const projeto = await projetosModel.buscar(id);
         if (!projeto) return res.status(404).json({ erro: 'projeto não encontrado'});
         res.json(projeto)
     },
@@ -25,12 +25,14 @@ const projetosControler = {
 //  ROTA 3 — Adicionar Projeto 
 //----------------------------------------------------------------------------------------------------------------------------
 
-    criar(req, res) {
-        const { descriçao, ativo,} = req.body;
-        const novoProjeto = {
-            descriçao,
-            ativo
-        };
+    async criar(req, res) {
+        const { nome, descricao, usuario_id, /*ativo,*/} = req.body;
+        const novoProjeto = await projetosModel.adicionar ({
+            nome,
+            descricao,
+            usuario_id,
+            /*ativo*/
+        });
         res.status(201).json(novoProjeto);
     },
 
@@ -38,14 +40,15 @@ const projetosControler = {
 // ROTA 4 — Atualizar Projeto
 //----------------------------------------------------------------------------------------------------------------------------
 
-    atualizar(req, res) {
+    async atualizar(req, res) {
         const id = Number(req.params.id);
-        const { descriçao, ativo } = req.body;
-        const projetoAtualizado = { 
-            id,
-            descriçao,
-            ativo, 
-        };
+        const { nome, descricao, usuario_id, /*ativo*/ } = req.body;
+        const projetoAtualizado = await projetosModel.atualizar(id, { 
+            nome,
+            descricao,
+            usuario_id
+            /*ativo,*/ 
+        });
         if (!projetoAtualizado) {
             return res.status(404).json({ erro: 'Projeto não encontrado' });
         }
