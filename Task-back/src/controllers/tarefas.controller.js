@@ -46,7 +46,6 @@ const tarefasControler = {
         const novaTarefa = await tarefasModel.adicionar(req.body);
         return res.status(201).json(novaTarefa);
     } catch (error) {
-        // O console.log vai te mostrar no terminal o REAL motivo de ter falhado
         console.error("Erro ao criar tarefa:", error); 
         
         // Retorna o erro amigável para o cliente sem quebrar o servidor

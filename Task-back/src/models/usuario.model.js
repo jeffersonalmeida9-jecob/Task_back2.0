@@ -43,7 +43,7 @@ module.exports = {
         return result
     },
  
-    atualizar: async (id, {nome, email, senha_hash}      ) => {
+    atualizar: async (id, {nome, email, senha_hash}) => {
         const UsuarioNow = await prisma.usuarios.findUnique({
             where: { id } });
         if (!UsuarioNow) return null;

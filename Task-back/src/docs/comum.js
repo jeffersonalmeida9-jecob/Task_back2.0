@@ -5,5 +5,11 @@ const schemas = {
         detalhes: { type: 'array', items: { type: 'string' } },
     }}}},
 };
-module.exports = { schemas };
+
+const json = (nome) => ({
+    'application/json': { schema: { $ref: `#/components/schemas/${nome}` } },
+});
+const parametroId = { name: 'id', in: 'path', required: true,
+    schema: { type: 'integer', example: 1 } };
+module.exports = { json, parametroId, schemas };
 

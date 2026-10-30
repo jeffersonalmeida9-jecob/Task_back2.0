@@ -44,6 +44,7 @@ module.exports = {
         if (!ProjetoNow) return null 
             
         const result = await prisma.projetos.update({
+            where: { id },
             data: {
                 nome: dados.nome,
                 descricao: dados.descricao,
@@ -53,11 +54,15 @@ module.exports = {
         return result
     },
 
-    remover: (id) => {
-        const indice = projetos.findIndex(t => t.id === id);
-        if (indice === -1) {
-            return null;
+    remover: async (id) => {
+        try {
+            const result = await prisma.projetos.delete;({
+                where: {id},
+            })
+            return result
+        } catch (erro) {
+            if (erro.code === 'P2025') {return null}
+            throw erro
         }
-        return projetos.splice(indice, 1)[0];
     }
 };

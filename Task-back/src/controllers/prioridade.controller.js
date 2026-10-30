@@ -27,12 +27,16 @@ const prioridadeController = {
 //----------------------------------------------------------------------------------------------------------------------------
 
     async criar(req, res) {
-        const { nome, email,} = req.body;
-        const novoUsuario = await prioridadeModel.adicionar ({
-            nome,
-            email
-        });
-        res.status(201).json(novoUsuario);
+        try {
+            const { descricao, ativo} = req.body;
+            const novoPrioridade = await prioridadeModel.adicionar ({
+                descricao,
+                ativo
+            });
+            res.status(201).json(novoPrioridade);
+        }   catch (erro) {
+            console.log("Erro ao criar prioridade:", erro)
+        }
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
