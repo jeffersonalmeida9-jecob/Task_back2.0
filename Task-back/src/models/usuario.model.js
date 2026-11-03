@@ -11,8 +11,6 @@ module.exports = {
                 id: true,
                 nome: true,
                 email: true,
-                criado_em: true,
-                atualizado_em: true,
             }
         });
         return result; 
@@ -25,8 +23,6 @@ module.exports = {
                 id: true,
                 nome: true,
                 email: true,
-                criado_em: true,
-                atualizado_em: true,
             }
         });
         return result
@@ -38,6 +34,11 @@ module.exports = {
                 nome: nome,
                 email: email,
                 senha_hash: senha
+            },
+            select: {
+                id: true,
+                nome: true,
+                email: true
             }
         });
         return result
@@ -54,6 +55,11 @@ module.exports = {
                 nome:nome,
                 email: email,
                 senha_hash: senha_hash,
+            },
+            select: {
+                id: true,
+                nome: true,
+                email: true
             }
         });
         return result

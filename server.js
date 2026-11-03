@@ -6,7 +6,7 @@ const express = require('express');
 const tarefasRoutes = require('./Task-back/src/routes/tarefas.routes');
 const usuariosRoutes = require('./Task-back/src/routes/usuarios.routes');
 const projetosRoutes = require('./Task-back/src/routes/projetos.routes');
-const prioridadeRoutes = require('./Task-back/src/routes/prioridade.routes')
+const prioridadesRoutes = require('./Task-back/src/routes/prioridade.routes')
 const cors = require('cors');
 const authRoutes = require('./Task-back/src/routes/auth.routes');
 const tratarErros = require ('./Task-back/src/middlewares/erro.middleware');
@@ -41,7 +41,7 @@ app.use('/auth', authRoutes);
 app.use('/tarefas', autenticar, tarefasRoutes);
 app.use('/usuarios', autenticar, usuariosRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
-app.use('/prioridade', autenticar, prioridadeRoutes)
+app.use('/prioridade', autenticar, prioridadesRoutes)
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 app.use((req, res) => {

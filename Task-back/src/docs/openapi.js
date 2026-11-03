@@ -1,4 +1,7 @@
 const tarefas = require('./tarefas.docs');
+const usuarios = require('./usuarios.docs');
+const projetos = require('./projetos.docs');
+const prioridade = require('./prioridades.docs');
 const comum = require('./comum')
 
 module.exports = {
@@ -10,10 +13,16 @@ module.exports = {
     },
     servers: [{ url: 'http://localhost:3000', description: 'Local' }],
     security: [{ bearerAuth: [] }],
-    paths: { ...tarefas.paths },
+    paths: { ...tarefas.paths,
+             ...usuarios.paths,
+             ...projetos.paths,
+             ...prioridade.paths
+             
+     },
 
     components: {
-        schemas: { ...comum.schemas, ...tarefas.schemas },
+        schemas: { ...comum.schemas, ...tarefas.schemas, ...usuarios.schemas, ...projetos.schemas, ...prioridade.schemas
+         },
         securitySchemes: {
             bearerAuth: {
                 type: 'http',
@@ -23,4 +32,3 @@ module.exports = {
         },
     },
 }
-
