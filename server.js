@@ -41,7 +41,7 @@ app.use('/auth', authRoutes);
 app.use('/tarefas', autenticar, tarefasRoutes);
 app.use('/usuarios', autenticar, usuariosRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
-app.use('/prioridade', autenticar, prioridadesRoutes)
+app.use('/prioridades', autenticar, prioridadesRoutes)
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 app.use((req, res) => {

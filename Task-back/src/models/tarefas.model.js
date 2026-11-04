@@ -110,6 +110,18 @@ module.exports = {
         return formatarTarefas(result)
       },
 
+      remover: async (id) => {
+          try {
+            const result = await prisma.tarefas.delete({
+              where: {id},
+            })
+            return result
+          } catch (erro) {
+            if (erro.code === 'P2025') {return null};
+            throw erro;
+          }
+        },
+
     
 
     //estatisticas: () => {
