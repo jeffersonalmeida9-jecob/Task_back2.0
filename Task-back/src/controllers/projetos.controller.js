@@ -1,4 +1,5 @@
 const projetosModel = require('../models/projetos.model')
+const criarErro = require('../utils/criarErros')
 const projetosControler = {
 
 //----------------------------------------------------------------------------------------------------------------------------
@@ -17,7 +18,9 @@ const projetosControler = {
     async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
         const projeto = await projetosModel.buscar(id);
-        if (!projeto) return res.status(404).json({ erro: 'projeto não encontrado'});
+        if (!projeto) {
+            throw criarErro(404,'Projeto não encontrado');
+        }
         res.json(projeto)
     },
 
@@ -50,7 +53,7 @@ const projetosControler = {
             /*ativo,*/ 
         });
         if (!projetoAtualizado) {
-            return res.status(404).json({ erro: 'Projeto não encontrado' });
+            throw criarErro(404,'Projeto não encontrado');
         }
         res.json(projetoAtualizado);
         },
@@ -59,11 +62,11 @@ const projetosControler = {
 // ROTA 5 — Deletar Projeto
 //----------------------------------------------------------------------------------------------------------------------------
 
-    remover(req, res) {
+    async remover(req, res) {
         const id = parseInt(req.params.id);
-        const usuario = projetosModel.remover(id);
+        const usuario = await projetosModel.remover(id);
         if (!usuario) {
-            return res.status(404).json({ erro: 'Projeto não encontrado' });
+            throw criarErro(404,'Projeto não encontrado');
         }
         res.json({ mensagem: 'Projeto removido com sucesso', id });
     },

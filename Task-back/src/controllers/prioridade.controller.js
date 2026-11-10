@@ -1,73 +1,82 @@
+
 const prioridadeModel = require("../models/prioridade.model");
+const criarErro = require('../utils/criarErros')
 
 const prioridadeController = {
 
 //----------------------------------------------------------------------------------------------------------------------------
-// ROTA 1 - Listar todos os usuários
+// ROTA 1 - Listar todas as prioridades
 //----------------------------------------------------------------------------------------------------------------------------
 
     async listar(req, res) {
-        const resultado = await prioridadeModel.listar ()
-        res.json(resultado)
+            const resultado = await prioridadeModel.listar();
+            res.json(resultado);
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
-// ROTA 2 — Buscar usuário por ID
+// ROTA 2 - Buscar prioridade por ID
 //----------------------------------------------------------------------------------------------------------------------------
 
     async buscarPorId(req, res) {
         const id = parseInt(req.params.id);
         const prioridade = await prioridadeModel.buscar(id);
-        if (!prioridade) return res.status(404).json({ erro: 'Prioridade não encontrado.'});
-        res.json(prioridade)
+        if (!prioridade) {
+            throw criarErro(404,'Prioridade não encontrada');
+        }
+        res.json(prioridade);
     },
 
+    
+
 //----------------------------------------------------------------------------------------------------------------------------
-//  ROTA 3 — Adicionar usuário 
+// ROTA 3 - Adicionar prioridade
 //----------------------------------------------------------------------------------------------------------------------------
 
     async criar(req, res) {
-        const { nome, email,} = req.body;
-        const novoUsuario = await prioridadeModel.adicionar ({
-            nome,
-            email
-        });
-        res.status(201).json(novoUsuario);
+            const { descricao, ativo } = req.body;
+            const novoPrioridade = await prioridadeModel.adicionar({
+                descricao,
+                ativo
+            });
+            res.status(201).json(novoPrioridade);
     },
 
 //----------------------------------------------------------------------------------------------------------------------------
-// ROTA 4 — Atualizar usuário
+// ROTA 4 - Atualizar prioridade
 //----------------------------------------------------------------------------------------------------------------------------
 
     async atualizar(req, res) {
         const id = Number(req.params.id);
-        const { nome, email } = req.body;
-        const usuarioAtualizado =  await prioridadeModel.atualizar(id, {
-            nome,
-            email
+        const { descricao, ativo } = req.body;
+
+        const prioridadeAtualizada = await prioridadeModel.atualizar(id, {
+            descricao,
+            ativo
         });
-        if (!usuarioAtualizado) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
+
+        if (!prioridadeAtualizada) {
+            throw criarErro(404,'Prioridade não encontrada');
         }
-        res.json(usuarioAtualizado);
-        },
+        res.json(prioridadeAtualizada);
+    },
 
 //----------------------------------------------------------------------------------------------------------------------------
-// ROTA 5 — Deletar usuarios
+// ROTA 5 - Deletar prioridade
 //----------------------------------------------------------------------------------------------------------------------------
 
     async remover(req, res) {
-        const id = parseInt(req.params.id);
-        const usuario = await prioridadeModel.remover(id);
-//        const usuario_t = tarefaModel.listar().filter(t => t.usuarioId === id)
-//        if (usuario_t) {
-//            return res.status(400).json({erro: 'Usuário possui tarefas. Remova as tarefas antes.'})
-//        
-        if (!usuario) {
-            return res.status(404).json({ erro: 'Prioridade não encontrada', /*usuario_t*/ });
-        }
-        res.json({ mensagem: 'Usuario removido com sucesso', id });
+            const id = parseInt(req.params.id);
+            const prioridade = await prioridadeModel.remover(id);
+
+            if (!prioridade) {
+                throw criarErro(404,'Prioridade não encontrada');
+            }
+            res.json({
+                mensagem: 'Prioridade removida com sucesso',
+                id
+            });
+
     },
 }
 
-module.exports = prioridadeController
+module.exports = prioridadeController;

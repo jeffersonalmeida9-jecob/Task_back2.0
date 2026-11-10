@@ -64,6 +64,7 @@ const tarefasControler = {
         const id = Number(req.params.id);
         const dados = req.body;
         const usuario_Id = req.usuario.id;
+        const prioridade_id = req.prioridade_id;
 
         // if (coluna === "andamento") {
         // const tarefasAndamento = tarefasModel
@@ -89,7 +90,9 @@ const tarefasControler = {
             tarefaAtualizada = await tarefasModel.atualizar(
                 id, 
                 dados, 
-                usuario_Id);
+                usuario_Id,
+                prioridade_id
+            );
         }
             if (!tarefaAtualizada) {
             throw criarErro(404,'Tarefa não encontrada');
@@ -105,7 +108,7 @@ const tarefasControler = {
         const id = parseInt(req.params.id);
         const removida = await tarefasModel.remover(id);
         if (!removida) {
-            throw criarErro(404, 'Tarefa não encontrada')
+            throw criarErro(404, 'Tarefa existe')
         }
         //const {projetoId} = req.body;
         //if (projetoId !== null) {

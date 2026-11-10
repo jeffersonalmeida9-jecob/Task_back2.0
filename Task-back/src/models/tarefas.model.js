@@ -83,7 +83,8 @@ module.exports = {
 
       atualizar: async (id, dados) => {
         const tarefaAtual = await prisma.tarefas.findUnique({
-          where: { id } });
+          where: { id } 
+        });
         if (!tarefaAtual) return null;
 
         const concluidaEm = dados.coluna === 'concluida' ? new Date() : null;

@@ -1,5 +1,7 @@
 const usuarioModel = require("../models/usuario.model");
 const tarefaModel = require("../models/tarefas.model")
+const criarErro = require('../utils/criarErros')
+
 
 const usuariosControler = {
 
@@ -51,7 +53,7 @@ const usuariosControler = {
             email
         });
         if (!usuarioAtualizado) {
-            return res.status(404).json({ erro: 'Usuário não encontrado' });
+            throw criarErro(404,'Usuário não encontrado');
         }
         res.json(usuarioAtualizado);
         },
@@ -68,7 +70,7 @@ const usuariosControler = {
 //            return res.status(400).json({erro: 'Usuário possui tarefas. Remova as tarefas antes.'})
 //        
         if (!usuario) {
-            return res.status(404).json({ erro: 'Usuário não encontrado', /*usuario_t*/ });
+            throw criarErro(404,'Usuário não encontrado');
         }
         res.json({ mensagem: 'Usuario removido com sucesso', id });
     },

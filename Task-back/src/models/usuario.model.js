@@ -11,8 +11,6 @@ module.exports = {
                 id: true,
                 nome: true,
                 email: true,
-                criado_em: true,
-                atualizado_em: true,
             }
         });
         return result; 
@@ -25,8 +23,6 @@ module.exports = {
                 id: true,
                 nome: true,
                 email: true,
-                criado_em: true,
-                atualizado_em: true,
             }
         });
         return result
@@ -38,12 +34,17 @@ module.exports = {
                 nome: nome,
                 email: email,
                 senha_hash: senha
+            },
+            select: {
+                id: true,
+                nome: true,
+                email: true
             }
         });
         return result
     },
  
-    atualizar: async (id, {nome, email, senha_hash}      ) => {
+    atualizar: async (id, {nome, email, senha_hash}) => {
         const UsuarioNow = await prisma.usuarios.findUnique({
             where: { id } });
         if (!UsuarioNow) return null;
@@ -54,6 +55,11 @@ module.exports = {
                 nome:nome,
                 email: email,
                 senha_hash: senha_hash,
+            },
+            select: {
+                id: true,
+                nome: true,
+                email: true
             }
         });
         return result

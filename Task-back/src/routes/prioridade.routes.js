@@ -22,13 +22,13 @@ router.get('/:id', idValido, prioridadeControler.buscarPorId)
 //ROTA 3 — Adicionar prioridade 
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.post('/', validar(schemas.usuario), prioridadeControler.criar)
+router.post('/', prioridadeControler.criar)
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 4 — Atualizar prioridade
 //----------------------------------------------------------------------------------------------------------------------------
 
-router.put('/:id', idValido, validar(schemas.usuario), prioridadeControler.atualizar)
+router.put('/:id', idValido, prioridadeControler.atualizar)
 
 //----------------------------------------------------------------------------------------------------------------------------
 // ROTA 5 — Deletar prioridade
