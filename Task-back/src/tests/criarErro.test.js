@@ -1,4 +1,4 @@
-const criarErro = require('./Task-back/src/utils/criarErros')
+const criarErro = require('../utils/criarErros')
 
 describe('criarErro', () => {
     test('devolve um Error com o status e a mensagem', () => {

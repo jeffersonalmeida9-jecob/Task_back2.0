@@ -3,21 +3,12 @@
 //----------------------------------------------------------------------------------------------------------------------------
 const pool = require('../database/db');
 const prisma = require('../database/prisma')
+const formatarTarefa = require('../utils/formatarTarefa')
+
 const incluirNomes = {
     projetos: { select: { nome: true}},
     usuarios: { select: { nome: true}},
     prioridade: { select: { descricao: true } },
-}
-
-function formatarTarefas(tarefa) {
-  const { projetos, usuarios, prioridade, ...resto } = tarefa;
-  return {
-    ...resto,
-    projeto: projetos?.nome,
-    usuario: usuarios?.nome,
-    prioridade: prioridade?.descricao,
-    prioridade_cor: prioridade?.cor,
-  };
 }
 
 module.exports = {
@@ -63,7 +54,7 @@ module.exports = {
             where: {id},
             include: incluirNomes,
         });
-        return tarefa ? formatarTarefas(tarefa) : null;
+        return tarefa ? formatarTarefa(tarefa) : null;
     },
 
     adicionar: async ({ texto, coluna, usuario_id, projeto_id, prioridade_id, ordem }) => {
@@ -78,7 +69,7 @@ module.exports = {
           },
           include: incluirNomes,
         });
-        return formatarTarefas(result)
+        return formatarTarefa(result)
     },
 
       atualizar: async (id, dados) => {
@@ -107,7 +98,7 @@ module.exports = {
           },
           include: incluirNomes
         });
-        return formatarTarefas(result)
+        return formatarTarefa(result)
       },
 
       remover: async (id) => {
