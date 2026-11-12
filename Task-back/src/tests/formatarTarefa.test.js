@@ -3,30 +3,30 @@ const formatarTarefa = require('../utils/formatarTarefa')
 
 function tarefaDoPrisma () {
     return { 
-                id: 1,
-                texto:  'Definir tabelas do banco', 
-                coluna: 'afazer',
-                projetos: {
-                   nome: 'TaskFlow'
-                },
-                usuarios: {
-                    nome: 'Ana Lima'
-                },
-                prioridade: {
-                    descricao: 'Alto', 
-                    cor: '#EF4444'
-                }
-            }
+        id: 1,
+        texto:  'Definir tabelas do banco', 
+        coluna: 'afazer',
+        projetos: {
+           nome: 'TaskFlow'
+        },
+        usuarios: {
+            nome: 'Ana Lima'
+        },
+        prioridade: {
+            descricao: 'Alto', 
+            cor: '#EF4444'
+        }
+    }
 }
 
 test ('achata as relações no formato que o front espera', () => {
-    const resultado = formatarTarefa(tarefaDoPrisma)
+    const resultado = formatarTarefa(tarefaDoPrisma())
     expect (resultado). toEqual({
         id: 1, 
         texto: 'Definir tabelas do banco',
         coluna: 'afazer',
         projeto: 'TaskFlow',
-        usuarios: 'Ana Lima',
+        usuario: 'Ana Lima',
         prioridade: 'Alto', 
         prioridade_cor: '#EF4444'
     });

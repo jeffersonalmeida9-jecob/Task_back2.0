@@ -7,7 +7,7 @@ function traduzirErroPrisma(erro, metodo) {
     }
     if (erro.code === 'P2003') {
         if (metodo === 'DELETE') 
-            return criarErro(409, 'Não é possível excluir: existem registros ligados a este');
+            return criarErro(409, 'Não é possível excluir: existem registros ligados a este projeto');
             return criarErro(400, 'Um dos ids informados não existe');
     }
     if (erro.code === 'P2025') {
