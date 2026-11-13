@@ -18,4 +18,3 @@ describe('criarErro', () => {
         expect(erro.detalhes).toBeUndefined();
     });
 })
-

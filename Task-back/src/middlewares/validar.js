@@ -27,7 +27,7 @@ function validar(schema, origem) {
                 const numero = typeof valor === 'string' ? Number(valor) : valor;
                  if(!Number.isInteger(numero) || numero <= 0) {
                     console.log("ok 2")
-                    erros.push(`Os campos ${campo} deve ser inteiro positivo`);
+                    erros.push(`O campo '${campo}' deve ser inteiro positivo`);
                 }
             } else if (regras.tipo && typeof valor !== regras.tipo) {
                 console.log("ok 3")
@@ -66,7 +66,10 @@ function validar(schema, origem) {
                 );
             }
         }  
-            if (erros.length > 0) throw criarErro(400, erros.join(";"));
+            if (erros.length > 0) { 
+                throw criarErro(400, "Dados inválidos", erros)
+            };
+            
             next();
     }   
 }
