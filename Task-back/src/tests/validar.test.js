@@ -1,5 +1,6 @@
 const validar = require('../middlewares/validar');
 const schema = require('../middlewares/schemas');
+jest.spyOn(console, 'log').mockImplementation(() => {});
 
 function pegarErro(funcao) {
     try {
