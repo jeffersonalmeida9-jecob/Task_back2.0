@@ -16,7 +16,7 @@ function tarefaValida() {
        coluna: 'afazer',
        usuario_id: 1,
        projeto_id: 1,
-       idprioridade: 2,
+       prioridade_id: 2,
    };
 }
 

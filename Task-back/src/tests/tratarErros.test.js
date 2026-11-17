@@ -1,6 +1,8 @@
 const { Prisma } = require('@prisma/client');
 const tratarErros = require('../middlewares/erro.middleware');
 const criarErro = require('../utils/criarErros');
+jest.spyOn(console, 'log').mockImplementation(() => {});
+
 // Um res de mentira: status devolve o próprio res
 function criarRes() {
     return {

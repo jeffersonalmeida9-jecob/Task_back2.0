@@ -37,6 +37,10 @@ app.use('/projetos', autenticar, projetosRoutes);
 app.use('/prioridades', autenticar, prioridadeRoutes)
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
+app.get('/', (req, res) => {
+    res.status(200).json({ mensagem: 'TaskFlow API funcionando!' });
+});
+
 app.use((req, res) => {
     throw criarErro (404, "Rota não encontrada")
    // res.status(404).json({ erro: 'Rota não encontrada' });});
