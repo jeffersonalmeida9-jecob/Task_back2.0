@@ -6,7 +6,7 @@ function tratarErros(erro, req, res, next) {
         erro = traduzirErroPrisma(erro, req.method);
     }
     const status = erro.status || 500
-    console.log('[ERRO]', req.method, req.url, erro.message);
+    console.error('[ERRO]', req.method, req.url, erro.message);
 
     const mensagem = status === 500 ? 'Erro interno no servidor' : erro.message
 

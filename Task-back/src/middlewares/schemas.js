@@ -1,7 +1,7 @@
 const schemas = {
 
     id: {
-        id: { obrigatorio: true, tipo: 'interito'}
+        id: { obrigatorio: true, tipo: 'inteiro'}
     },
 
     tarefa: {

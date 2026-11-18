@@ -39,22 +39,22 @@ const tarefasControler = {
 //----------------------------------------------------------------------------------------------------------------------------
 
    async criar(req, res) {
-    try {
-        const texto = req.body.texto;
-        if (!texto || texto.trim() === '') {
-            return res.status(400).json({ erro: 'O campo "texto" é obrigatório' });
+        try {
+            const texto = req.body.texto;
+            if (!texto || texto.trim() === '') {
+                return res.status(400).json({ erro: 'O campo "texto" é obrigatório' });
+            }
+            //const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
+            //if (tarefas_andameto.length >= 2) window.alert('Limite de 2 tarefas em andamento por usuário atingido')
+
+            const novaTarefa = await tarefasModel.adicionar({ ...req.body, usuario_id: req.usuario.id,});
+            return res.status(201).json(novaTarefa);
+        } catch (error) {
+            console.log('deu muito ruimmm')
+            console.error("Erro ao criar tarefa:", error); 
+            return res.status(500).json({ erro: 'Não foi possível adicionar a tarefa', detalhes: error.message });
         }
-        //const tarefas_andameto = tarefasModel.listar().filter(t => t.coluna === 'andamento' && t.usuarioId === usuarioId);
-        //if (tarefas_andameto.length >= 2) window.alert('Limite de 2 tarefas em andamento por usuário atingido')
-        
-        const novaTarefa = await tarefasModel.adicionar({ ...req.body, usuario_id: req.usuario.id,});
-        return res.status(201).json(novaTarefa);
-    } catch (error) {
-        console.error("Erro ao criar tarefa:", error); 
-        
-        return res.status(500).json({ erro: 'Não foi possível adicionar a tarefa', detalhes: error.message });
-    }
-},
+    },
 
 //----------------------------------------------------------------------------------------------------------------------------
 //  5 — Atualizar tarefa
@@ -108,13 +108,13 @@ const tarefasControler = {
         const id = parseInt(req.params.id);
         const removida = await tarefasModel.remover(id);
         if (!removida) {
-            throw criarErro(404, 'Tarefa existe')
+            throw criarErro(404, 'Tarefa não existe')
         }
         //const {projetoId} = req.body;
         //if (projetoId !== null) {
         //    return res.status(400).json({erro: 'Projeto possui tarefas associadas. Remova as tarefas antes.'})
         //}
-        res.json({ mensagem: 'Tarefa removida com sucesso', tarefa: removida });
+        res.status(200).json({ mensagem: 'Tarefa removida com sucesso', tarefa: removida });
     },
 
 //----------------------------------------------------------------------------------------------------------------------------

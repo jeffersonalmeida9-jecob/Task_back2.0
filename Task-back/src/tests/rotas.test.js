@@ -63,7 +63,7 @@ describe('rotas da API', () => {
 
     test('GET /prioridades com token: 200 e uma lista', async () => {
         const resposta = await request(app)  
-        .get('/prioridade')
+        .get('/prioridades')
         .set('Authorization', `Bearer ${token}`);
         expect(resposta.status).toBe(200);
         expect(Array.isArray(resposta.body)).toBe(true);
