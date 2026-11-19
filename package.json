@@ -8,7 +8,7 @@
     "start": "node server.js"
   },
   "jest": {
-    "setupFiles": ["<rootDir>Task-back/src/tests/setup-env.js"]
+    "setupFiles": ["<rootDir>src/tests/setup-env.js"]
   },
   "keywords": [],
   "author": "",
