@@ -1,20 +1,20 @@
 require('dotenv').config();
 
-const autenticar = require('./Task-back/src/middlewares/autenticar')
+const autenticar = require('./src/middlewares/autenticar')
 const express = require('express');
-const tarefasRoutes = require('./Task-back/src/routes/tarefas.routes');
-const usuariosRoutes = require('./Task-back/src/routes/usuarios.routes');
-const projetosRoutes = require('./Task-back/src/routes/projetos.routes');
-const prioridadeRoutes = require('./Task-back/src/routes/prioridade.routes')
+const tarefasRoutes = require('./src/routes/tarefas.routes');
+const usuariosRoutes = require('./src/routes/usuarios.routes');
+const projetosRoutes = require('./src/routes/projetos.routes');
+const prioridadeRoutes = require('./src/routes/prioridade.routes')
 const cors = require('cors');
-const authRoutes = require('./Task-back/src/routes/auth.routes');
-const tratarErros = require ('./Task-back/src/middlewares/erro.middleware');
-const validarContentType = require('./Task-back/src/middlewares/validarContentType');
-const logger = require('./Task-back/src/middlewares/logger');
-const criarErro = require('./Task-back/src/utils/criarErros');
+const authRoutes = require('./src/routes/auth.routes');
+const tratarErros = require ('./src/middlewares/erro.middleware');
+const validarContentType = require('./src/middlewares/validarContentType');
+const logger = require('./src/middlewares/logger');
+const criarErro = require('./src/utils/criarErros');
 const swaggerUi = require('swagger-ui-express');
-const openapi = require('./Task-back/src/docs/openapi');
-//const corsMiddleware = require('./Task-back/src/middlewares/cors')
+const openapi = require('./src/docs/openapi');
+//const corsMiddleware = require('./src/middlewares/cors')
 
 const app = express();
 

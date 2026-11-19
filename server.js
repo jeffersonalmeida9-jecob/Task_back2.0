@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const prisma = require('./Task-back/src/database/prisma')
+const prisma = require('./src/database/prisma')
 const app = require('./app');
 const PORTA = process.env.PORTA || 3000;
 
