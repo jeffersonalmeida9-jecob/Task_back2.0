@@ -12,7 +12,7 @@ const authController = {
 
         const usuario = await usuarioModel.buscarPorEmail(email);
         if (!usuario)
-            return res.status(401).json({ erro: 'Credenciais inválidas 1' });
+            return res.status(401).json({ erro: 'Credenciais inválidas' });
 
         if (usuario.senha_hash !== senha){
             console.log(usuario.senha)
